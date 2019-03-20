@@ -59,6 +59,14 @@ public class MyActionListner implements ActionListener {
 	 */
 	public void ReinforcementPhase() {
 		// controll.AddArmies(currentPlayer);
+//		MFrame3 frame3=new MFrame3();
+	/*	try {
+			frame3.fun(controll.player.getPlayerCards());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	*/	
 		controll.frame.ActivateAll();
 		controll.frame.NotifyAll();
 		controll.OnlyNeeded(controll.playerObjet(currentPlayer).getTotalCountriesOccupied());
@@ -125,14 +133,25 @@ public class MyActionListner implements ActionListener {
 			attackCountry1 = country;
 			controll.frame.ActivateAll();
 			List<Country> abc = controll.attackController.getMyNeighborsForAttack(country);
+			if(abc.size()<1) {
+				controll.frame.ActivateAll();
+				attackCountry1 = null;
+				attackCountry2 = null;
+				controll.frame.error("No Neighbours to attack");
+				controll.OnlyNeeded(controll.playerObjet(currentPlayer).getTotalCountriesOccupied());
+				controll.RefreshButtons();
+
+				
+			}else {
 			controll.frame.OnlyNeeded(abc);
 			controll.RefreshButtons();
-
+			}
 		} else if (attackCountry2 == null) {
 			attackCountry2 = country;
 			String reply = controll.attackController.attackButton(attackCountry1, attackCountry2);
 			if (!reply.equals("")) {
 				controll.frame.error(reply);
+			
 			}
 			controll.frame.AAA = controll.attackController.attackerDiceRoll.toString();
 			controll.frame.BBB = controll.attackController.defenderDiceRoll.toString();
@@ -142,6 +161,7 @@ public class MyActionListner implements ActionListener {
 			attackCountry2 = null;
 			controll.OnlyNeeded(controll.playerObjet(currentPlayer).getTotalCountriesOccupied());
 			controll.RefreshButtons();
+			controll.PaintCountries();
 
 		} else {
 			attackCountry1 = null;
